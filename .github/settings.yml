@@ -1,0 +1,6 @@
+_extends: gh-config
+
+repository:
+  description: priorityQueue is a queue with priority support
+  homepage: https://blog.openacid.com
+  topics: python, priorityqueue
