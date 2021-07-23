@@ -45,7 +45,7 @@ print('consumed all: counts:', repr(count))
 # from .proc import CalledProcessError
 # from .proc import ProcError
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 __name__ = "k3priorityqueue"
 
 from .priorityqueue import (

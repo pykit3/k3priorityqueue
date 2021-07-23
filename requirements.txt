@@ -1,6 +1,6 @@
 -r _building/requirements.txt
 
 
-k3ut~=0.1.7
-k3heap~=0.1.4
-k3thread~=0.1.0
+k3ut>=0.1.15,<0.2
+k3heap>=0.1.5,<0.2
+k3thread>=0.1.0,<0.2
