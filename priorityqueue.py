@@ -140,9 +140,8 @@ class PriorityQueue(object):
         remove_producer(int,bool)
         Args:
             producer_id: specifies the id of a producer to remove.
-
-            ignore_not_found: if it is `False`, raies a `KeyError` when such a `producer_id` not found.
-                          Defaults to `False`.
+            ignore_not_found: if it is `False`, raies a `KeyError` when such a `producer_id` not fou
+            Defaults to `False`
         """
         with self.heap_lock:
             if producer_id not in self.producer_by_id and ignore_not_found:
