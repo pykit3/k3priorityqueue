@@ -16,14 +16,14 @@ for _ in range(12):
     count[val] = count.get(val, 0) + 1
     print(val)
 
-print('respect priority ratio: counts:', repr(count))
+print("respect priority ratio: counts:", repr(count))
 
 while True:
     try:
         val = pq.get()
-    except k3priorityqueue.Empty as e:
+    except k3priorityqueue.Empty:
         break
     count[val] = count.get(val, 0) + 1
     print(val)
 
-print('consumed all: counts:', repr(count))
+print("consumed all: counts:", repr(count))

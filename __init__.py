@@ -42,27 +42,20 @@ while True:
 print('consumed all: counts:', repr(count))
 """
 
-# from .proc import CalledProcessError
-# from .proc import ProcError
+from importlib.metadata import version
 
-__version__ = "0.1.2"
-__name__ = "k3priorityqueue"
+__version__ = version("k3priorityqueue")
 
 from .priorityqueue import (
     Empty,
-
     Producer,
     PriorityQueue,
-
     default_priority,
 )
 
 __all__ = [
-    'Empty',
-
-    'Producer',
-    'PriorityQueue',
-
-    'default_priority',
+    "Empty",
+    "Producer",
+    "PriorityQueue",
+    "default_priority",
 ]
-

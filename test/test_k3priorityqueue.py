@@ -9,19 +9,16 @@ dd = k3ut.dd
 
 
 class TestConsumedQueue(unittest.TestCase):
-
     def test_init(self):
-
         cq = k3priorityqueue.Producer(1, 1, [])
         self.assertEqual(1, cq.priority)
         self.assertEqual(0, cq.consumed)
-        self.assertEqual(k3priorityqueue.default_priority / cq.priority,
-                         cq.item_cost)
+        self.assertEqual(k3priorityqueue.default_priority / cq.priority, cq.item_cost)
 
     def test_priority(self):
         self.assertRaises(ValueError, k3priorityqueue.Producer, 1, 0, [])
         self.assertRaises(ValueError, k3priorityqueue.Producer, 1, -1, [])
-        self.assertRaises(ValueError, k3priorityqueue.Producer, 1, '', [])
+        self.assertRaises(ValueError, k3priorityqueue.Producer, 1, "", [])
 
     def test_consumed(self):
         a = k3priorityqueue.Producer(1, 1, [1, 2])
@@ -40,52 +37,51 @@ class TestConsumedQueue(unittest.TestCase):
         a = k3priorityqueue.Producer(1, 1, [1, 2])
         b = k3priorityqueue.Producer(1, 1, [1, 2])
 
-        self.assertFalse(a < b, 'both empty')
-        self.assertFalse(b < a, 'both empty')
+        self.assertFalse(a < b, "both empty")
+        self.assertFalse(b < a, "both empty")
 
         a.get()
         b.get()
 
-        self.assertFalse(a < b, 'both empty')
-        self.assertFalse(b < a, 'both empty')
+        self.assertFalse(a < b, "both empty")
+        self.assertFalse(b < a, "both empty")
 
     def test_lt(self):
         a = k3priorityqueue.Producer(1, 1, range(100))
         b = k3priorityqueue.Producer(1, 10, range(100))
 
         # 0 0, but b has smaller item_cost
-        self.assertFalse(a < b, 'b has higher priority')
-        self.assertTrue(b < a, 'b has higher priority')
+        self.assertFalse(a < b, "b has higher priority")
+        self.assertTrue(b < a, "b has higher priority")
 
         # 0 0.1
         b.get()
-        self.assertTrue(a < b, 'b consumed 1')
-        self.assertFalse(b < a, 'b consumed 1')
+        self.assertTrue(a < b, "b consumed 1")
+        self.assertFalse(b < a, "b consumed 1")
 
         # 1 0.1
         a.get()
-        self.assertFalse(a < b, 'a consumed 1')
-        self.assertTrue(b < a, 'a consumed 1')
+        self.assertFalse(a < b, "a consumed 1")
+        self.assertTrue(b < a, "a consumed 1")
 
         # 1 0.2
         b.get()
-        self.assertFalse(a < b, 'a b consumed 1')
-        self.assertTrue(b < a, 'a b consumed 1')
+        self.assertFalse(a < b, "a b consumed 1")
+        self.assertTrue(b < a, "a b consumed 1")
 
         # 1 1
         for _ in range(8):
             b.get()
-        self.assertFalse(a < b, 'a b consumed 1')
-        self.assertTrue(b < a, 'a consume 1 b consumed 10')
+        self.assertFalse(a < b, "a b consumed 1")
+        self.assertTrue(b < a, "a consume 1 b consumed 10")
 
         # 1 1.1
         b.get()
-        self.assertTrue(a < b, 'a b consumed 1')
-        self.assertFalse(b < a, 'a b consumed 1')
+        self.assertTrue(a < b, "a b consumed 1")
+        self.assertFalse(b < a, "a b consumed 1")
 
 
 class TestPriorityQueue(unittest.TestCase):
-
     def test_get(self):
         producers = (
             # id, priority, iterable
@@ -93,19 +89,20 @@ class TestPriorityQueue(unittest.TestCase):
             (2, 2, [2] * 10),
             (3, 3, [3] * 10),
         )
-        expected = [3,  # .3    0  0.0
-                    2,  # .3   .5  0.0
-                    1,  # .3   .5  1.0
-                    3,  # .6   .5  1.0
-                    2,  # .6  1.0  1.0
-                    3,  # 1.0  1.0  1.0
-                    3,  # 1.3  1.0  1.0
-                    2,  # 1.3  1.5  1.0
-                    1,  # 1.3  1.5  2.0
-                    3,  # 1.6  1.5  2.0
-                    2,  # 1.6  2.0  2.0
-                    3,  # 2.0  2.0  2.0
-                    ]
+        expected = [
+            3,  # .3    0  0.0
+            2,  # .3   .5  0.0
+            1,  # .3   .5  1.0
+            3,  # .6   .5  1.0
+            2,  # .6  1.0  1.0
+            3,  # 1.0  1.0  1.0
+            3,  # 1.3  1.0  1.0
+            2,  # 1.3  1.5  1.0
+            1,  # 1.3  1.5  2.0
+            3,  # 1.6  1.5  2.0
+            2,  # 1.6  2.0  2.0
+            3,  # 2.0  2.0  2.0
+        ]
         pq = k3priorityqueue.PriorityQueue()
         for pid, prio, itr in producers:
             pq.add_producer(pid, prio, itr)
@@ -166,7 +163,6 @@ class TestPriorityQueue(unittest.TestCase):
         pq.remove_producer(1, ignore_not_found=True)
 
     def test_bench(self):
-
         pq = k3priorityqueue.PriorityQueue()
 
         ntimes = 10240
@@ -190,7 +186,7 @@ class TestPriorityQueue(unittest.TestCase):
                 th.join()
 
             us_per_call = t.spent() / ntimes / n_thread * 1000 * 1000
-            dd(us_per_call, 'us/call')
+            dd(us_per_call, "us/call")
 
         self.assertLess(us_per_call, 100)
 
@@ -220,12 +216,12 @@ class TestPriorityQueue(unittest.TestCase):
         for i in range(1, nq + 1):
             q = pq.producer_by_id[i]
             consumed.append(q.consumed)
-            dd('get:', q.stat)
-            got += q.stat['get']
+            dd("get:", q.stat)
+            got += q.stat["get"]
 
         self.assertEqual(ntimes * n_thread, got)
 
-        dd('consumed:', consumed)
+        dd("consumed:", consumed)
         self.assertAlmostEqual(consumed[0], consumed[1])
         self.assertAlmostEqual(consumed[1], consumed[2])
 
@@ -234,4 +230,4 @@ def yield_forever():
     i = random.randint(1, 1000000)
     while True:
         i += 1
-        yield (i * 2654435769) & 0xffffffff
+        yield (i * 2654435769) & 0xFFFFFFFF
