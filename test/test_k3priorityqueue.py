@@ -1,9 +1,10 @@
 import random
 import unittest
 
-import k3priorityqueue
 import k3thread
 import k3ut
+
+import k3priorityqueue
 
 dd = k3ut.dd
 

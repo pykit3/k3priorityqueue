@@ -39,7 +39,7 @@ for _ in range(12):
     val = pq.get()
     count[val] = count.get(val, 0) + 1
 
-print('counts:', repr(count))
+print("counts:", repr(count))
 # Output shows ratio approximately 1:2:3
 ```
 

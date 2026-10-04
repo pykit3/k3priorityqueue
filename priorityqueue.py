@@ -8,7 +8,7 @@ default_priority = 10.0
 Empty = queue.Empty
 
 
-class Producer(object):
+class Producer:
     """
     An internal class which tracks consumption state.
     It provides with a `get()` method to retrieve and item from it.
@@ -65,17 +65,13 @@ class Producer(object):
         self.cmp_key = (self.consumed, self.item_cost)
 
     def __str__(self):
-        return "[{producer_id}={priority} c={consumed}]".format(
-            producer_id=self.producer_id,
-            priority=self.priority,
-            consumed=self.consumed,
-        )
+        return f"[{self.producer_id}={self.priority} c={self.consumed}]"
 
     def __lt__(self, b):
         return self.cmp_key < b.cmp_key
 
 
-class PriorityQueue(object):
+class PriorityQueue:
     """
     A queue managing several `Producer` instances.
     It produces items by `Producer.priority`.

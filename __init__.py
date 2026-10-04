@@ -48,14 +48,14 @@ __version__ = version("k3priorityqueue")
 
 from .priorityqueue import (
     Empty,
-    Producer,
     PriorityQueue,
+    Producer,
     default_priority,
 )
 
 __all__ = [
     "Empty",
-    "Producer",
     "PriorityQueue",
+    "Producer",
     "default_priority",
 ]
