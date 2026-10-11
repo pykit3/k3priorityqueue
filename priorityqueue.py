@@ -123,7 +123,9 @@ class PriorityQueue:
                 self.producer_by_id[producer_id] = p
             else:
                 # if exist, update its priority and iterable.
+                # iter() and set_priority() check their argument before p changes, so a bad argument leaves p as it is.
                 p = self.producer_by_id[producer_id]
+                iterable = iter(iterable)
                 p.set_priority(priority)
                 p.set_iterable(iterable)
 

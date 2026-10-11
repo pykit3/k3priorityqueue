@@ -151,6 +151,35 @@ class TestPriorityQueue(unittest.TestCase):
 
         self.assertEqual(10, pq.get())
 
+    def test_add_queue_update_failed(self):
+        # A failed update of an existing producer changes nothing: the queue produces the same items.
+        def build():
+            pq = k3priorityqueue.PriorityQueue()
+            for pid in (1, 2, 3):
+                pq.add_producer(pid, 1, [pid] * 4)
+            pq.get()
+            pq.get()
+            return pq
+
+        def drain(pq):
+            rst = []
+            while True:
+                try:
+                    rst.append(pq.get())
+                except k3priorityqueue.Empty:
+                    return rst
+
+        want = drain(build())
+
+        for priority, iterable, err in (
+            (100, 5, TypeError),
+            (float("inf"), [3] * 4, ValueError),
+            (0, [3] * 4, ValueError),
+        ):
+            pq = build()
+            self.assertRaises(err, pq.add_producer, 3, priority, iterable)
+            self.assertEqual(want, drain(pq), (priority, iterable))
+
     def test_remove_queue(self):
         pq = k3priorityqueue.PriorityQueue()
         pq.add_producer(1, 1, [1, 1])
