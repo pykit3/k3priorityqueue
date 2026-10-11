@@ -1,3 +1,4 @@
+import itertools
 import random
 import unittest
 
@@ -232,30 +233,38 @@ class TestPriorityQueue(unittest.TestCase):
         nq = 3
         n_thread = 3
         ths = []
+        got_by_thread = [[] for _ in range(n_thread)]
 
-        def worker():
+        def worker(got):
             for _ in range(ntimes):
-                pq.get()
+                got.append(pq.get())
 
         for i in range(1, nq + 1):
-            pq.add_producer(i, i, yield_forever())
+            # Producer i yields (i, 0), (i, 1), ..., so every item is distinct.
+            pq.add_producer(i, i, zip(itertools.repeat(i), itertools.count()))
 
         for i in range(n_thread):
-            th = k3thread.daemon(worker)
+            th = k3thread.daemon(worker, args=(got_by_thread[i],))
             ths.append(th)
 
         for th in ths:
             th.join()
 
+        got = []
+        for items in got_by_thread:
+            got.extend(items)
+        got.sort()
+
+        # Every item is got once, and no producer skips an item.
+        want = []
         consumed = []
-        got = 0
         for i in range(1, nq + 1):
             q = pq.producer_by_id[i]
             consumed.append(q.consumed)
             dd("get:", q.stat)
-            got += q.stat["get"]
+            want.extend((i, k) for k in range(q.stat["get"]))
 
-        self.assertEqual(ntimes * n_thread, got)
+        self.assertEqual(want, got)
 
         dd("consumed:", consumed)
         self.assertAlmostEqual(consumed[0], consumed[1])
