@@ -1,3 +1,4 @@
+import math
 import queue
 import threading
 
@@ -50,8 +51,9 @@ class Producer:
     def set_priority(self, priority):
         priority = float(priority)
 
-        if priority <= 0:
-            raise ValueError("priority can not be less or euqal 0: " + str(priority))
+        # NaN fails every comparison, and infinity makes item_cost 0, so the producer is never consumed.
+        if not (math.isfinite(priority) and priority > 0):
+            raise ValueError("priority must be a finite number greater than 0: " + str(priority))
 
         self.priority = priority
         self.item_cost = default_priority / float(self.priority)

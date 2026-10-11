@@ -21,6 +21,12 @@ class TestConsumedQueue(unittest.TestCase):
         self.assertRaises(ValueError, k3priorityqueue.Producer, 1, -1, [])
         self.assertRaises(ValueError, k3priorityqueue.Producer, 1, "", [])
 
+        for priority in (float("nan"), float("inf"), float("-inf"), "nan", "inf"):
+            self.assertRaises(ValueError, k3priorityqueue.Producer, 1, priority, [])
+
+            pq = k3priorityqueue.PriorityQueue()
+            self.assertRaises(ValueError, pq.add_producer, 1, priority, [])
+
     def test_consumed(self):
         a = k3priorityqueue.Producer(1, 1, [1, 2])
         b = k3priorityqueue.Producer(1, 10, range(20))
